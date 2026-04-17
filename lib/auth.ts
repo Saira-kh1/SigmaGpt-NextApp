@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import { randomBytes } from "crypto";
 import { NextRequest } from "next/server";
 
@@ -34,7 +34,7 @@ export function signUserToken(user: {
       name: user.name,
     },
     getSecret(),
-    { expiresIn: JWT_EXPIRES_IN }
+    { expiresIn: JWT_EXPIRES_IN } as SignOptions  // ✅ fix
   );
 }
 
@@ -43,7 +43,7 @@ export function signGuestToken(): string {
   return jwt.sign(
     { sub: guestId, role: "guest", isGuest: true },
     getSecret(),
-    { expiresIn: "24h" }
+    { expiresIn: "24h" } as SignOptions  // ✅ fix
   );
 }
 

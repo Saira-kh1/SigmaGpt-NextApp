@@ -26,13 +26,14 @@ export async function GET(req: NextRequest, { params }: Params) {
     if (!thread)
       return NextResponse.json({ error: "Thread not found" }, { status: 404 });
 
-    const allMessages = (thread as { messages: unknown[] }).messages;
+    type LeanThread = { messages: unknown[]; title: string };
+    const { messages: allMessages, title } = (thread as unknown) as LeanThread;
     const total = allMessages.length;
     const messages = allMessages.slice(skip, skip + limit);
 
     return NextResponse.json({
       threadId,
-      title: (thread as { title: string }).title,
+      title,
       total,
       skip,
       limit,
